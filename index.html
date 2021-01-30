@@ -64,11 +64,11 @@
             <div class="input-group f-class">
                 <div>
                     <label for="">First Class ($150)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <input id="firstClass-ticket-count" class="inp-style inp-width" type="text" name="" value="0">
                 </div>
-                <div>
-                    <button class="btn btn-info"><span class="plus-minus-size">+</span></button>
-                    <button class="btn btn-info"><span class="plus-minus-size" >-</span></button>
+                <div >
+                    <button onclick="ticketQuantityChange('firstClass',true)" class="btn btn-info"><span class="plus-minus-size">+</span></button>
+                    <button onclick=" ticketQuantityChange('firstClass',false)" class="btn btn-info"><span class="plus-minus-size" >-</span></button>
                 </div>
             </div>
             
@@ -78,9 +78,9 @@
                     <label for="">Economy ($100)</label>
                     <input id="economy-ticket-count" class="inp-style inp-width" type="text" name="" value="0">
                 </div>
-                <div class="plus-minus-btn">
-                    <button id="economy-plus-button" class="btn btn-info"><span class="plus-minus-size">+</span></button>
-                    <button id="economy-minus-button" class="btn btn-info"><span class="plus-minus-size" >-</span></button>
+                <div>
+                    <button onclick="ticketQuantityChange('economy',true)" class="btn btn-info"><span class="plus-minus-size">+</span></button>
+                    <button onclick="ticketQuantityChange('economy',false)" class="btn btn-info"><span class="plus-minus-size" >-</span></button>
                 </div>
             </div>
 
@@ -101,7 +101,7 @@
                         <p>Charge 10% VAT</p>
                     </div>
                     <div class="right">
-                        <p>$50</p>
+                        <p id="tax-amount">$00</p>
                     </div>
                 </div>
                 <hr>
@@ -112,7 +112,7 @@
                         <h4>Total</h4>
                     </div>
                     <div class="right">
-                        <p>$550</p>
+                        <p id="grand-total">$000</p>
                     </div>
                 </div>
             </div>
@@ -126,30 +126,90 @@
     </section>
 
     <!--Script-->
-    <script>
-             document.getElementById('economy-plus-button').addEventListener('click',function(){
-                ticketQuantityChange(true);
-            });
-    
-              document.getElementById('economy-minus-button').addEventListener('click', function(){
-                     ticketQuantityChange(false);
-              });
-
-             function ticketQuantityChange(increased){
-                    const economyTicketQuantity = document.getElementById('economy-ticket-count');
-                    const ticketCount = parseInt(economyTicketQuantity.value);
-                    //   const ticketNewCount = ticketCount - 1;
-                        let ticketNewCount =ticketCount;
-                        if (increased == true){
+  <script>
+      function ticketQuantityChange(ticketType, increased){
+                    // const ticketQuantity = document.getElementById(ticketType +'-ticket-count');
+                    const ticketCount = ticketInputValue(ticketType);
+                    let ticketNewCount =ticketCount;
+                    if (increased == true){
                             ticketNewCount = ticketCount + 1;
                         }
-                        if(increased == false){
+                    if(increased == false && ticketCount>0){
                             ticketNewCount = ticketCount - 1;
                         }
-                    economyTicketQuantity.value = ticketNewCount;
-                    const economyTotal = ticketNewCount * 100;
-                    document.getElementById('total-ticket-price').innerText = '$'+ economyTotal;
-                }
+                    document.getElementById(ticketType +'-ticket-count').value = ticketNewCount;
+                    // const firstClassTicketPrice = ticketNewCount * 150;
+                    // const economyTicketPrice = ticketNewCount * 100;
+                    // const totalTicketPrice = firstClassTicketPrice + economyTicketPrice;
+                    // document.getElementById('total-ticket-price').innerText = '$' + totalTicketPrice;
+                     
+                    let ticketPrice = 0;
+                    if(ticketType == 'firstClass'){
+                        ticketPrice = ticketNewCount * 150;
+                    }
+                    if(ticketType == 'economy'){
+                        ticketPrice = ticketNewCount * 100;
+                    }
+                    
+                    totalPriceCalculation ();
+                    // document.getElementById('total-ticket-price').innerText = '$'+ ticketPrice;
+      }
+       function totalPriceCalculation (){
+                const firstClassTicketCount = ticketInputValue('firstClass');
+                const economyTicketCount = ticketInputValue('economy');
+                const totalPrice = economyTicketCount * 100 + firstClassTicketCount * 150;
+                document.getElementById('total-ticket-price').innerText = '$' + totalPrice;
+                
+                const tax = totalPrice * 0.1;
+                document.getElementById('tax-amount').innerText = '$' + tax;
+
+                const grandTotal = totalPrice + tax;
+                document.getElementById('grand-total').innerText = '$' + grandTotal;
+            }
+
+       function ticketInputValue(ticketType){
+        const ticketInput = document.getElementById( ticketType + '-ticket-count');
+            const ticketCount = parseInt(ticketInput.value);
+            return ticketCount;
+       }
+
+
+
+            // function firstClassTicketQuantityChange(increased){
+            //         const firstClassTicketQuantity = document.getElementById('firstClass-ticket-count');
+            //         const firstTicketCount = parseInt(firstClassTicketQuantity.value);
+            //         let firstClassTicketNewCount = firstTicketCount;
+            //         if (increased == true){
+            //             firstClassTicketNewCount = firstTicketCount + 1;
+            //             }
+            //         if(increased == false && firstTicketCount>0){
+            //             firstClassTicketNewCount = firstTicketCount - 1;
+            //             }
+            //             firstClassTicketQuantity.value = firstClassTicketNewCount;
+            //         const firstClassTotal = firstClassTicketNewCount * 150;
+            //         // document.getElementById('total-ticket-price').innerText = '$'+  firstClassTotal;
+            //     }
+            //  function economyTicketQuantityChange(increased){
+            //         const economyTicketQuantity = document.getElementById('economy-ticket-count');
+            //         const ticketCount = parseInt(economyTicketQuantity.value);
+            //         let ticketNewCount =ticketCount;
+            //         if (increased == true){
+            //                 ticketNewCount = ticketCount + 1;
+            //             }
+            //         if(increased == false && ticketCount>0){
+            //                 ticketNewCount = ticketCount - 1;
+            //             }
+            //         economyTicketQuantity.value = ticketNewCount;
+            //         const economyTotal = ticketNewCount * 100;
+            //         // document.getElementById('total-ticket-price').innerText = '$'+ economyTotal;
+            //     }
+            //     // document.getElementById('total-ticket-price').innerText = '$'+ totalTicketPrice;
+
+
+
+                // document.getElementById('firstClass-plus-button').addEventListener('click',function(){
+                //     console.log("clicked");
+                // });
 
             // document.getElementById('economy-plus-button').addEventListener('click',function(){
             //     const economyTicketQuantity = document.getElementById('economy-ticket-count');
@@ -167,10 +227,9 @@
             //       economyTicketQuantity.value = ticketNewCount;
             //       const economyTotal = ticketNewCount * 100;
             //       document.getElementById('total-ticket-price').innerText = '$'+ economyTotal;
-            //   })
+            //   });
            
-    </script>
-
+  </script>
 
 
     <!--Thank You-->
