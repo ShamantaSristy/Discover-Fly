@@ -116,7 +116,7 @@
                     </div>
                 </div>
             </div>
-            <button class="btn-style">Book Now</button>
+            <button id="booking-button" class="btn-style">Book Now</button>
         </div>
 
         <div class="booking-content">
@@ -127,108 +127,50 @@
 
     <!--Script-->
   <script>
-      function ticketQuantityChange(ticketType, increased){
-                    // const ticketQuantity = document.getElementById(ticketType +'-ticket-count');
-                    const ticketCount = ticketInputValue(ticketType);
-                    let ticketNewCount =ticketCount;
-                    if (increased == true){
-                            ticketNewCount = ticketCount + 1;
+    // Buttons and Quantity Check
+        function ticketQuantityChange(ticketType, increased){
+                        const ticketCount = ticketInputValue(ticketType);
+                        let ticketNewCount =ticketCount;
+                        if (increased == true){
+                                ticketNewCount = ticketCount + 1;
+                            }
+                        if(increased == false && ticketCount>0){
+                                ticketNewCount = ticketCount - 1;
+                            }
+                        document.getElementById(ticketType +'-ticket-count').value = ticketNewCount;
+                        
+                        let ticketPrice = 0;
+                        if(ticketType == 'firstClass'){
+                            ticketPrice = ticketNewCount * 150;
                         }
-                    if(increased == false && ticketCount>0){
-                            ticketNewCount = ticketCount - 1;
+                        if(ticketType == 'economy'){
+                            ticketPrice = ticketNewCount * 100;
                         }
-                    document.getElementById(ticketType +'-ticket-count').value = ticketNewCount;
-                    // const firstClassTicketPrice = ticketNewCount * 150;
-                    // const economyTicketPrice = ticketNewCount * 100;
-                    // const totalTicketPrice = firstClassTicketPrice + economyTicketPrice;
-                    // document.getElementById('total-ticket-price').innerText = '$' + totalTicketPrice;
-                     
-                    let ticketPrice = 0;
-                    if(ticketType == 'firstClass'){
-                        ticketPrice = ticketNewCount * 150;
-                    }
-                    if(ticketType == 'economy'){
-                        ticketPrice = ticketNewCount * 100;
-                    }
-                    
-                    totalPriceCalculation ();
-                    // document.getElementById('total-ticket-price').innerText = '$'+ ticketPrice;
-      }
-       function totalPriceCalculation (){
-                const firstClassTicketCount = ticketInputValue('firstClass');
-                const economyTicketCount = ticketInputValue('economy');
-                const totalPrice = economyTicketCount * 100 + firstClassTicketCount * 150;
-                document.getElementById('total-ticket-price').innerText = '$' + totalPrice;
-                
-                const tax = totalPrice * 0.1;
-                document.getElementById('tax-amount').innerText = '$' + tax;
-
-                const grandTotal = totalPrice + tax;
-                document.getElementById('grand-total').innerText = '$' + grandTotal;
+                        
+                        totalPriceCalculation ();
+        }  
+        function ticketInputValue(ticketType){
+                        const ticketInput = document.getElementById( ticketType + '-ticket-count');
+                        const ticketCount = parseInt(ticketInput.value);
+                        return ticketCount;
             }
+// Total ticket price
+        function totalPriceCalculation (){
+                        const firstClassTicketCount = ticketInputValue('firstClass');
+                        const economyTicketCount = ticketInputValue('economy');
+                        const totalPrice = economyTicketCount * 100 + firstClassTicketCount * 150;
+                        document.getElementById('total-ticket-price').innerText = '$' + totalPrice;
+                        
+                        const tax =Math.round(totalPrice * 0.1);
+                        document.getElementById('tax-amount').innerText = '$' + tax;
 
-       function ticketInputValue(ticketType){
-        const ticketInput = document.getElementById( ticketType + '-ticket-count');
-            const ticketCount = parseInt(ticketInput.value);
-            return ticketCount;
-       }
-
-
-
-            // function firstClassTicketQuantityChange(increased){
-            //         const firstClassTicketQuantity = document.getElementById('firstClass-ticket-count');
-            //         const firstTicketCount = parseInt(firstClassTicketQuantity.value);
-            //         let firstClassTicketNewCount = firstTicketCount;
-            //         if (increased == true){
-            //             firstClassTicketNewCount = firstTicketCount + 1;
-            //             }
-            //         if(increased == false && firstTicketCount>0){
-            //             firstClassTicketNewCount = firstTicketCount - 1;
-            //             }
-            //             firstClassTicketQuantity.value = firstClassTicketNewCount;
-            //         const firstClassTotal = firstClassTicketNewCount * 150;
-            //         // document.getElementById('total-ticket-price').innerText = '$'+  firstClassTotal;
-            //     }
-            //  function economyTicketQuantityChange(increased){
-            //         const economyTicketQuantity = document.getElementById('economy-ticket-count');
-            //         const ticketCount = parseInt(economyTicketQuantity.value);
-            //         let ticketNewCount =ticketCount;
-            //         if (increased == true){
-            //                 ticketNewCount = ticketCount + 1;
-            //             }
-            //         if(increased == false && ticketCount>0){
-            //                 ticketNewCount = ticketCount - 1;
-            //             }
-            //         economyTicketQuantity.value = ticketNewCount;
-            //         const economyTotal = ticketNewCount * 100;
-            //         // document.getElementById('total-ticket-price').innerText = '$'+ economyTotal;
-            //     }
-            //     // document.getElementById('total-ticket-price').innerText = '$'+ totalTicketPrice;
-
-
-
-                // document.getElementById('firstClass-plus-button').addEventListener('click',function(){
-                //     console.log("clicked");
-                // });
-
-            // document.getElementById('economy-plus-button').addEventListener('click',function(){
-            //     const economyTicketQuantity = document.getElementById('economy-ticket-count');
-            //     const ticketCount = parseInt(economyTicketQuantity.value);
-            //     const ticketNewCount = ticketCount + 1;
-            //     economyTicketQuantity.value = ticketNewCount;
-            //     const economyTotal = ticketNewCount * 100;
-            //     document.getElementById('total-ticket-price').innerText = '$' + economyTotal;
-            // });
-    
-            //   document.getElementById('economy-minus-button').addEventListener('click', function(){
-            //       const economyTicketQuantity = document.getElementById('economy-ticket-count');
-            //       const ticketCount = parseInt(economyTicketQuantity.value);
-            //       const ticketNewCount = ticketCount - 1;
-            //       economyTicketQuantity.value = ticketNewCount;
-            //       const economyTotal = ticketNewCount * 100;
-            //       document.getElementById('total-ticket-price').innerText = '$'+ economyTotal;
-            //   });
-           
+                        const grandTotal = totalPrice + tax;
+                        document.getElementById('grand-total').innerText = '$' + grandTotal;
+                    }
+// Greetings and further procedure 
+        document.getElementById('booking-button').addEventListener('click',function(){
+            alert("Thank You for choosing us.We wish you a safe and comfortable journey. Click OK for further payment procedure.");
+        });    
   </script>
 
 
